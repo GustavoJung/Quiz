@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "348465098793",
+    "firebase_url": "https://quiz-6ee9e.firebaseio.com",
+    "project_id": "quiz-6ee9e",
+    "storage_bucket": "quiz-6ee9e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348465098793:android:37350177cc1fcb19",
+        "android_client_info": {
+          "package_name": "ceavi.udesc.br.quiz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "348465098793-qqoilqtkddnfm6mkt0ndlltqlfth7nei.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxD7GJBP5RyVOcqA4N493kAYFd21X-_k8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

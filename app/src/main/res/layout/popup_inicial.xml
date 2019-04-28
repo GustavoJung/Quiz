@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="18dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/image"
+            android:layout_gravity="center_horizontal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Seu número do SPE"
+                android:id="@+id/spe_login"
+                android:inputType="number"
+                android:layout_gravity="center_horizontal"
+                />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/bt_logar"
+        android:background="#013ADF"
+        android:layout_gravity="center_horizontal"
+        />
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+        android:text="Ainda não tem uma conta?"
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Criar conta"
+            android:textColor="#FFF"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:id="@+id/bt_cadastrar"
+            android:layout_marginTop="10dp"
+            android:background="#013ADF"
+            android:layout_gravity="center_horizontal"
+            />
+
+    </LinearLayout>
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

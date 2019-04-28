@@ -1,0 +1,28 @@
+<resources>
+    <string name="facebook_app_id">473020736529784</string>
+    <string name="fb_login_protocol_scheme">fb473020736529784</string>
+    <string name="app_name">Quiz</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="sync_pref">Sync</string>
+    <string name="sync_pref_summary">Get your photos, videos, contacts, subscriptions etc on all your devices</string>
+    <string name="pref_sync_ConnectionType">Sync Connection Type</string>
+    <string name="pref_sync_ConnectionType_dialog_title">Perform Sync Using</string>
+    <string name="pref_sync_ConnectionType_default_value">Wifi</string>
+    <string name="pref_sync_ConnectionType_summary">Wifi</string>
+
+    <string-array name="pref_sync_ConnectionType_entries">
+        <item>Wifi</item>
+        <item>Mobile Data</item>
+        <item>Wifi/Mobile Data</item>
+    </string-array>
+
+    <string-array name="pref_sync_ConnectionType_values">
+        <item>Wifi</item>
+        <item>Mobile Data</item>
+        <item>Wifi/Mobile Data</item>
+    </string-array>
+</resources>

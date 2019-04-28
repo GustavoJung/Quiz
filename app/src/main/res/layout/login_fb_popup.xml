@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Finalizando seu cadastro!"
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:layout_marginTop="10dp"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:hint="Seu número do SPE!"
+            android:inputType="number"
+            android:id="@+id/input_speF"
+            android:maxLength="7" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:hint="Confirme seu número do SPE!"
+            android:inputType="number"
+            android:id="@+id/input_speF_confirma"
+            android:maxLength="7" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="A sigla da sua faculdade!"
+            android:textSize="18sp"
+            android:inputType="textCapWords"
+            android:id="@+id/input_siglaF"/>
+
+        <Button
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp"
+            android:id="@+id/bt_finalizarF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cadastrar"
+            android:onClick="onClick"
+            android:layout_gravity="center_horizontal"
+            android:background="#013ADF"
+            android:textColor="#FFF" />
+    </LinearLayout>
+
+</LinearLayout>

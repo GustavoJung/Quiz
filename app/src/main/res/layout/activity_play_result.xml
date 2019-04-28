@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlayResultActivity">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/pontuacao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Você fez 0 pontos"
+        android:textSize="30sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="150dp"/>
+
+    <Button
+        android:id="@+id/jogar_novamente"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:text="Jogar Novamente"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        />
+
+    <Button
+        android:id="@+id/mudar_categoria"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:text="Mudar Categoria"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        />
+
+    <Button
+        android:id="@+id/ver_rankinkgs"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:text="Ver rankings"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        />
+
+    <Button
+        android:id="@+id/bt_inicio"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:text="Voltar ao Início"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        />
+
+</LinearLayout>
+</android.support.constraint.ConstraintLayout>
