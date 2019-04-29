@@ -10,6 +10,7 @@ import android.widget.TextView;
 public class PlayResultActivity extends AppCompatActivity implements View.OnClickListener {
     private String categoria;
     private int pontuacao_rodada;
+    private String spe;
 
     private TextView pontuacao;
     private Button playAgain;
@@ -23,6 +24,7 @@ public class PlayResultActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_play_result);
         categoria = getIntent().getStringExtra("categoria");
         pontuacao_rodada = Integer.parseInt(getIntent().getStringExtra("pontuacao") );
+        spe = getIntent().getStringExtra("spe");
 
         pontuacao = findViewById(R.id.pontuacao);
         pontuacao.setText("Você fez " + pontuacao_rodada + " pontos!");
@@ -45,16 +47,19 @@ public class PlayResultActivity extends AppCompatActivity implements View.OnClic
             case R.id.jogar_novamente:
                 Intent intent1 = new Intent(PlayResultActivity.this, PlayActivity.class);
                 intent1.putExtra("categoria",categoria+"");
+                intent1.putExtra("spe", spe);
                 startActivity(intent1);
                 finish();
                 break;
             case R.id.mudar_categoria:
                 Intent intent2 = new Intent(PlayResultActivity.this, CategoriasActivity.class);
+                intent2.putExtra("spe", spe);
                 startActivity(intent2);
                 finish();
                 break;
             case R.id.ver_rankinkgs:
                 Intent intent3 = new Intent(PlayResultActivity.this,RankingActivity.class);
+                intent3.putExtra("spe", spe);
                 startActivity(intent3);
                 finish();
                 break;

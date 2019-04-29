@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -29,10 +28,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(getApplication());
-
         mAuth = FirebaseAuth.getInstance();
 
         choose();
@@ -61,11 +57,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void choose(){
-        if(mAuth.getCurrentUser() != null) {
-            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-            startActivity(intent);
-            finish();
-        }
+
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.popup_inicial,null);
@@ -85,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         bt_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkIfUsernameExists(spe.getText().toString());
+                checkIfUsernameExists(spe.getText().toString(), spe);
             }
         });
 
@@ -93,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                intent.putExtra("spe", spe.getText().toString());
                 startActivity(intent);
                     dialog.dismiss();
                 finish();
@@ -101,26 +94,39 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void checkIfUsernameExists(final String username){
+    private void checkIfUsernameExists(final String username, final EditText et) {
         FirebaseDatabase dataBase = FirebaseDatabase.getInstance();
         DatabaseReference reference = dataBase.getReference("users");
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String user = ds.child("spe").getValue().toString();
-                    if (user.equals(username)) {
-                        Intent intent = new Intent(MainActivity.this,MenuActivity.class);
+                boolean controle = false;
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        if (ds.getKey().equalsIgnoreCase(username)) {
+                            controle = true;
+                            break;
+                        } else {
+                            controle = false;
+                        }
+                    }
+                    if (controle == true) {
+                        Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                        intent.putExtra("spe", username);
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(MainActivity.this, "Número SPE inválido!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "SPE INVÁLIDO OU INEXISTENTE!", Toast.LENGTH_LONG).show();
+                        et.setText("");
+                        et.requestFocus();
                     }
                 }
             }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
     }
 

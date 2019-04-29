@@ -18,7 +18,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     private Button ranking;
     private Button sair;
     private FirebaseAuth mAuth;
-
+    private String spe;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +34,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         this.findViewById(R.id.bt_ranking).setOnClickListener(this);
         this.findViewById(R.id.bt_sair).setOnClickListener(this);
 
+        spe = getIntent().getStringExtra("spe");
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -59,12 +60,15 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
     public void jogar(){
         Intent intent = new Intent(MenuActivity.this, CategoriasActivity.class);
+        System.out.println(spe);
+        intent.putExtra("spe", spe);
         startActivity(intent);
         finish();
     }
 
     public void ranking(){
         Intent intent = new Intent(MenuActivity.this, RankingActivity.class);
+        intent.putExtra("spe", spe);
         startActivity(intent);
         finish();
     }

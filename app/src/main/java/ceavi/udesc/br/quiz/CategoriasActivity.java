@@ -16,10 +16,14 @@ public class CategoriasActivity extends AppCompatActivity implements View.OnClic
     private Button cat4;
     private FirebaseAuth mAuth;
 
+    private String spe;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categorias);
+
+        spe = getIntent().getStringExtra("spe");
 
         cat1 = (Button) this.findViewById(R.id.bt_cat1);
         cat2 = (Button) this.findViewById(R.id.bt_cat2);
@@ -57,6 +61,7 @@ public class CategoriasActivity extends AppCompatActivity implements View.OnClic
     private void categoriaSelected(String categoria) {
         Intent intent = new Intent(CategoriasActivity.this, PlayActivity.class);
         intent.putExtra("categoria",categoria);
+        intent.putExtra("spe", spe);
         startActivity(intent);
         finish();
     }

@@ -1,7 +1,6 @@
 
 package ceavi.udesc.br.quiz;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,14 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
+
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,7 +19,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Arrays;
 
 import ceavi.udesc.br.quiz.model.Academico;
 
@@ -33,8 +26,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private EditText nome, spe, sigla, email, spe_confirma;
     private FirebaseAuth mAuth;
-    private LoginButton loginButton;
-    private CallbackManager callBackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +39,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         spe_confirma = findViewById(R.id.spe_confirma);
 
         mAuth = FirebaseAuth.getInstance();
-        findViewById(R.id.bt_login).setOnClickListener(this);
-
+        findViewById(R.id.bt_cadastrar).setOnClickListener(this);
         }
 
     protected void onStart() {
@@ -59,19 +49,50 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_login:
-                registerUser(sigla.getText().toString(), spe.getText().toString(), nome.getText().toString(), email.getText().toString(), 0);
+            case R.id.bt_cadastrar:
+                existe(spe.getText().toString());
                 break;
         }
     }
 
-    private void registerUser(String siglaA, final String speF, String nomeA, String emailU, int pont) {
+    public void existe(final String spe) {
+        FirebaseDatabase dataBase = FirebaseDatabase.getInstance();
+        final DatabaseReference reference = dataBase.getReference("users");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    System.out.println("if1");
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        System.out.println("for");
+                        if (ds.getKey().equalsIgnoreCase(spe) || ds.child("email").getValue().toString().equalsIgnoreCase(email.getText().toString())) {
+                            System.out.println(ds.getKey() + " uashd " + spe);
+                            System.out.println(ds.child("email").getValue().toString() + " uashd " + email.getText().toString());
+                            Toast.makeText(LoginActivity.this, "EMAIL OU SPE JÁ CADASTRADO!", Toast.LENGTH_LONG).show();
+                            break;
+                        } else {
+                            registerUser(sigla.getText().toString(), spe, nome.getText().toString(), email.getText().toString(), 0);
+                            break;
+                        }
+                    }
+                }
+        }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+    }
+
+
+    private void registerUser(final String siglaA, final String speF, String nomeA, String emailU, int pont) {
         final String name = nomeA;
         final String siglaF = siglaA;
         final String speA = speF;
         final String emailUs = emailU;
         final int pontuacao = pont;
-
         mAuth.createUserWithEmailAndPassword(emailUs, speA).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(Task<AuthResult> task) {
@@ -86,32 +107,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     final FirebaseDatabase database = FirebaseDatabase.getInstance();
                     final DatabaseReference ref = database.getReference();
 
-                    FirebaseDatabase.getInstance().getReference("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                    FirebaseDatabase.getInstance().getReference("users").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            boolean existe = false;
-                            if (dataSnapshot != null) {
-                                for (DataSnapshot users : dataSnapshot.getChildren()) {
-                                    if (users.child("email").getValue().toString().equalsIgnoreCase(emailUs)) {
-                                        existe = true;
-                                        if (existe) break;
-                                    }
-                                }
-                                if (!existe) {
-                                    ref.child("users").child(speA).setValue(c);
-                                    Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    Toast.makeText(LoginActivity.this, "Email já está em uso! Tente novamente!", Toast.LENGTH_SHORT).show();
-                                    email.requestFocus();
-                                    nome.setText("");
-                                    spe.setText("");
-                                    sigla.setText("");
-                                    email.setText("");
-                                    email.requestFocus();
-                                    spe_confirma.setText("");
-                                }
+                            if (dataSnapshot.exists()) {
+                                ref.child("users").child(speA).setValue(c);
+                                mAuth.signInWithEmailAndPassword(emailUs, speA);
+                                appendFacul(speA, siglaF);
                             }
                         }
 
@@ -120,11 +122,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     });
 
-                }else {
-                    Toast.makeText(LoginActivity.this, "Ocorreu um erro!", Toast.LENGTH_SHORT).show();
-                  }
+                }
             }
         });
+    }
+
+    private void appendFacul(final String speA, final String sigla) {
+        final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+        final DatabaseReference referer = database1.getReference("faculdades");
+
+        referer.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    referer.child(sigla.toUpperCase()).child(speA).setValue(speA);
+                    Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+                    intent.putExtra("spe", speA);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
     }
 
 }

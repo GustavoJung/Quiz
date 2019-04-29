@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="@color/colorPrimary">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,64 +19,71 @@
         android:orientation="vertical"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
+        android:backgroundTint="@android:color/white"
         android:background="@drawable/borda">
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="28sp"
             android:textStyle="bold"
             android:text="Informe seus dados!"
             android:textColor="#000"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="35dp" />
 
         <EditText
+            android:layout_marginTop="10dp"
             android:id="@+id/email"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Digite seu email!"
             android:inputType="textEmailAddress"
+
             />
 
         <EditText
             android:id="@+id/nome"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Digite seu nome completo!"
             android:inputType="textCapWords"
+
             />
 
 
         <EditText
             android:id="@+id/sigla"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Digite a sigla da sua faculdade!"
             android:inputType="textCapSentences"
+
             />
 
         <EditText
             android:id="@+id/spe"
             android:inputType="number"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Digite seu número do SPE!"
             android:maxLength="7"
+
             />
 
 
         <EditText
             android:id="@+id/spe_confirma"
             android:inputType="number"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Confirme o número do SPE!"
             android:maxLength="7"
             />
 
         <TextView
+            android:layout_marginTop="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
@@ -90,11 +98,10 @@
 
         <Button
             android:layout_marginTop="20dp"
-            android:id="@+id/bt_login"
+            android:id="@+id/bt_cadastrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cadastrar"
-            android:onClick="onClick"
             android:layout_gravity="center_horizontal"
             android:background="#013ADF"
             android:textColor="#FFF"

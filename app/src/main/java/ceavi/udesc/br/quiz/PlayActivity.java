@@ -6,14 +6,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import ceavi.udesc.br.quiz.model.Academico;
 import ceavi.udesc.br.quiz.model.Questao;
 
 public class PlayActivity extends AppCompatActivity implements View.OnClickListener {
@@ -37,11 +41,14 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
     private int pontuacao;
     private List<Questao> questoes_banco = new ArrayList<>();
     private Random r = new Random();
+    private String spe;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
         fire = FirebaseDatabase.getInstance();
+
+        spe = getIntent().getStringExtra("spe");
 
         mAnswerA = findViewById(R.id.id_alternativa1);
         mAnswerB = findViewById(R.id.id_alternativa2);
@@ -119,13 +126,45 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
                 }
             },800);
         } else {
-            Intent intent = new Intent(PlayActivity.this, PlayResultActivity.class);
+            final Intent intent = new Intent(PlayActivity.this, PlayResultActivity.class);
                 intent.putExtra("categoria", categoria + "");
                 intent.putExtra("pontuacao", pontuacao + "");
+            intent.putExtra("spe", spe);
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference ref = database.getReference();
 
-                mCountDown.cancel();
-                startActivity(intent);
-                 finish();
+            FirebaseDatabase.getInstance().getReference("users").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Academico u = new Academico();
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot d : dataSnapshot.getChildren()) {
+                            if (d.getKey().equalsIgnoreCase(spe)) {
+                                u.setEmail(d.child("email").getValue().toString());
+                                u.setFaculdade(d.child("faculdade").getValue().toString());
+                                u.setNome(d.child("nome").getValue().toString());
+                                u.setPontuacao((Integer.parseInt(d.child("pontuacao").getValue().toString())) + pontuacao);
+                                u.setSpe(spe);
+                                FirebaseDatabase.getInstance().getReference("users").child(spe).setValue(u);
+
+                                mCountDown.cancel();
+                                startActivity(intent);
+                                finish();
+                                break;
+                            }
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
+
+
+
         }
     }
 
