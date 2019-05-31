@@ -2,18 +2,13 @@ package ceavi.udesc.br.quiz;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,9 +23,13 @@ import java.util.Random;
 import ceavi.udesc.br.quiz.model.Academico;
 import ceavi.udesc.br.quiz.model.Questao;
 
+
+//Essa classe é o controlador da parte jogável (selecionar resposta, etc..).
+//Cada turno se dá por 4 questões, obtidas do banco de dados, aleatoriamente selecionadas.
 public class PlayActivity extends AppCompatActivity implements View.OnClickListener {
 
-    FirebaseDatabase fire;
+    //Declaração de variáveis
+    FirebaseDatabase fire; //declaração do banco
     String categoria;
     private static final long START_TIME_IN_MILLIS = 16000;
     private TextView mTimer;
@@ -46,7 +45,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-        fire = FirebaseDatabase.getInstance();
+        fire = FirebaseDatabase.getInstance();//instanciação do banco
 
         spe = getIntent().getStringExtra("spe");
 
@@ -129,31 +128,37 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
             final Intent intent = new Intent(PlayActivity.this, PlayResultActivity.class);
                 intent.putExtra("categoria", categoria + "");
                 intent.putExtra("pontuacao", pontuacao + "");
-            intent.putExtra("spe", spe);
-            final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            final DatabaseReference ref = database.getReference();
+                intent.putExtra("spe", spe);
 
-            FirebaseDatabase.getInstance().getReference("users").addValueEventListener(new ValueEventListener() {
+                //instancia atual do banco de dados
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                //referencia ao banco em determinado 'pai'. Nesse caso, a referencia é direto ao pai 'users'.
+            final DatabaseReference ref = database.getReference("users");
+                //adicionando um listener a essa referencia
+            ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Academico u = new Academico();
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot d : dataSnapshot.getChildren()) {
+                    if (dataSnapshot.exists()) {//essa verificação é "necessária" pois os listeners do firebase são assíncronos
+                        //ou seja, eles não esperam o resultado da busca ao banco chegar para continuar o código, eles continuam direto, com essa veri-
+                        //ficação, o código acontece se o dado do banco existe, evitando null pointers e erros.
+
+                        for (DataSnapshot d : dataSnapshot.getChildren()) {//esse for percorre todos os filhos da referencia 'users'
                             if (d.getKey().equalsIgnoreCase(spe)) {
                                 u.setEmail(d.child("email").getValue().toString());
                                 u.setFaculdade(d.child("faculdade").getValue().toString());
                                 u.setNome(d.child("nome").getValue().toString());
                                 u.setPontuacao((Integer.parseInt(d.child("pontuacao").getValue().toString())) + pontuacao);
                                 u.setSpe(spe);
-                                FirebaseDatabase.getInstance().getReference("users").child(spe).setValue(u);
-
-                                mCountDown.cancel();
-                                startActivity(intent);
-                                finish();
+                                System.out.println("if antes do firebase ");
+                                ref.child(spe).setValue(u);
+                                System.out.println("if depois");
                                 break;
                             }
                         }
 
+                    }else{
+                        System.out.println("DataSnapshot não existe");
                     }
                 }
 
@@ -161,10 +166,10 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
                 public void onCancelled(DatabaseError databaseError) {
                 }
             });
-
-
-
-
+            System.out.println("countdown");
+            mCountDown.cancel();
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -213,8 +218,8 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
        }
 
         private void fillButtons () {
-            System.out.println("fill buttons");
-        mAnswerA.setBackgroundColor(Color.WHITE);
+
+            mAnswerA.setBackgroundColor(Color.WHITE);
             mAnswerB.setBackgroundColor(Color.WHITE);
             mAnswerC.setBackgroundColor(Color.WHITE);
             mAnswerD.setBackgroundColor(Color.WHITE);

@@ -104,14 +104,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     c.setEmail(emailUs);
                     c.setPontuacao(0);
 
+                    //instancia atual do banco
                     final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    //referencia a um determinado pai, passado abaixo, nesse caso 'users'.
                     final DatabaseReference ref = database.getReference();
-
+                        //adicionando um listener para inserção de dados
                     FirebaseDatabase.getInstance().getReference("users").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                ref.child("users").child(speA).setValue(c);
+                            if (dataSnapshot.exists()) {//verifica se a busca ao banco já retornou algo, e somente a partir dai continua o codigo
+                                ref.child("users").child(speA).setValue(c);//na referencia 'users', no filho 'speA' é
+                                // setado o valor C (um objeto nesse caso).
                                 mAuth.signInWithEmailAndPassword(emailUs, speA);
                                 appendFacul(speA, siglaF);
                             }
